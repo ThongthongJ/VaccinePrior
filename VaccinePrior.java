@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class VaccinePrior {
 
     static public void checkEligible(LocalDate date) {
+        DateTimeFormatter dateFormatOutput = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
 
         LocalDate dateBirthDay = LocalDate.of((date.getYear() - 543), date.getMonth(),
                 date.getDayOfMonth());
@@ -41,7 +42,7 @@ public class VaccinePrior {
                 return;
             }
             // Age more than 65 years old
-            if (age > 65) {
+            else if (age > 65) {
                 eligibleFlag = true;
             }
             // Adult 64 years old -> 65 years old
@@ -74,10 +75,11 @@ public class VaccinePrior {
                     // Baby 1 year born in December 2563 *********
                     else if (age == 1) {
                         if (monthBirthDayValue == 12) {
-                            int lastDay = firstDayVaccine.lengthOfMonth();
+                            int lastDayMonth = firstDayVaccine.lengthOfMonth();
+                            System.out.println("TTTTTTTT : " + firstDayVaccine);
                             eligibleFlag = true;
                             firstDayVaccine = LocalDate.of(firstDayVaccine.getYear(), firstDayVaccine.getMonthValue(),
-                                    lastDay);
+                                    lastDayMonth);
                         } else {
                             eligibleFlag = true;
                         }
@@ -112,36 +114,10 @@ public class VaccinePrior {
         }
 
         // Call function disPlay
-        disPlay(dateBirthDay, firstDayVaccine, lastDayVaccine, eligibleFlag);
-    }
-
-    static public void disPlay(LocalDate dateBirth, LocalDate fistDay, LocalDate lastDay, boolean eligible) {
-
-        DateTimeFormatter dateFormatOutput = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
-
-        LocalDate firstDayVaccine = fistDay;
-        LocalDate lastDayVaccine = lastDay;
-
-        LocalDate dateBirthDay = dateBirth;
-
-        boolean eligibleFlag = eligible;
-
-        int dayBirthDay = dateBirthDay.getDayOfMonth();
-
-        Month monthBirthDay = dateBirthDay.getMonth();
-        int monthBirthDayValue = monthBirthDay.getValue();
-
-        Year yearBirthDay = Year.from(dateBirthDay);
-        int yearBirthDayValue = yearBirthDay.getValue();
-
-        int age = lastDayVaccine.getYear() - yearBirthDayValue;
-
         // Display status
         String fdv = firstDayVaccine.format(dateFormatOutput);
         String ldv = lastDayVaccine.format(dateFormatOutput);
-
         String status = "";
-
         // <Display> : Can get Vaccine
         if (eligibleFlag == true) {
             status = "Y";
@@ -151,74 +127,14 @@ public class VaccinePrior {
             System.out.println("║ End date : " + ldv + "     ║");
             System.out.println("╚════════════════════════════╝");
         }
-
         // <Display> : Can't get Vaccine!
         else {
             status = "N";
-            // Baby Can't get vaccine.
-            if (age == 0) {
-                int checkGetVaccine = 6 + monthBirthDayValue;
-                LocalDate dateBabySixMonth = LocalDate.of(yearBirthDayValue, monthBirthDayValue, dayBirthDay);
-
-                try {
-                    // Check 6 months old in 2564
-                    if (checkGetVaccine <= 12) {
-                        dateBabySixMonth = LocalDate.of(yearBirthDayValue, checkGetVaccine, dayBirthDay);
-                    }
-                    // Check 6 months old next year
-                    else if (checkGetVaccine > 12) {
-                        Month convertMonth = Month.of((checkGetVaccine % 12));
-                        int nextYear = dateBabySixMonth.getYear() + 1;
-                        dateBabySixMonth = LocalDate.of(nextYear, convertMonth, 01);
-                        int lastDayMonth = dateBabySixMonth.lengthOfMonth();
-
-                        // Check last day on month?
-                        if (dayBirthDay > lastDayMonth) {
-                            dateBabySixMonth = LocalDate.of(nextYear, convertMonth, lastDayMonth);
-                        } else {
-                            dateBabySixMonth = LocalDate.of(nextYear, convertMonth, dayBirthDay);
-                        }
-                    }
-                } catch (Exception e) {
-                    System.out.println("CHECK CATCH BABY DISPLAY");
-                    System.out.println(dateBabySixMonth);
-                }
-                // <Display> : 6 months old can't get vaccine.
-                int dayBabyGet = dateBabySixMonth.getDayOfMonth();
-                Month monthBabyGet = dateBabySixMonth.getMonth();
-                int yearBabyGet = dateBabySixMonth.getYear();
-
-                System.out.println("╔════════════════════════════════════════════╗");
-                System.out.println("║ Eligible Flag : " + status + "                          ║");
-                System.out.println("║ You can't get vaccine.                     ║");
-                System.out.println("║ Baby will 6 months old on " + dayBabyGet + " " + monthBabyGet
-                        + " " + (yearBabyGet + 543) + " ║");
-                System.out.println("╚════════════════════════════════════════════╝");
-            }
-
-            // Child can't get vaccine.
-            else if (age == 3) {
-
-                System.out.println("╔══════════════════════════════════════════╗");
-                System.out.println("║ Eligible Flag : " + status + "                        ║");
-                System.out.println("║ You can't get vaccine.                   ║");
-                System.out.println("║ You are 3 years old on " + dayBirthDay + " " + monthBirthDay
-                        + " " + (2021 + 543) + " ║");
-                System.out.println("╚══════════════════════════════════════════╝");
-            }
-
-            // Adult can't get Vaccine.
-            else {
-                int tempY = 65 - age;
-                int yearGetVaccine = 2021 + tempY;
-                System.out.println("╔══════════════════════════════════════════╗");
-                System.out.println("║ Eligible Flag : " + status + "                        ║");
-                System.out.println("║ You can't get vaccine.                   ║");
-                System.out.println("║ You will 65 years old on " + dayBirthDay + " " + monthBirthDay
-                        + " " + (yearGetVaccine + 543) + " ║");
-                System.out.println("╚══════════════════════════════════════════╝");
-            }
-
+            System.out.println("╔════════════════════════════╗");
+            System.out.println("║ Eligible Flag : " + status + "          ║");
+            System.out.println("║ Start Date : -             ║ ");
+            System.out.println("║ End date : -               ║ ");
+            System.out.println("╚════════════════════════════╝");
         }
     }
 
@@ -247,37 +163,39 @@ public class VaccinePrior {
         // }
 
         // Input Birth Day
-        // while (true) {
-        //     try {
-        //         System.out.println("Please enter your birth day (dd-MM-yyyy)");
-        //         dateBirthDay = LocalDate.parse(scan.next(), dateFormatInput);
+        while (true) {
+        try {
+        System.out.println("Please enter your birth day (dd-MM-yyyy)");
+        dateBirthDay = LocalDate.parse(scan.next(), dateFormatInput);
 
-        //         birthday = dateBirthDay.format(dateFormatOutput);
-        //         break;
-        //     } catch (Exception e) {
-        //         System.out.println("Invalid birth day! Please try again.");
-        //     }
-        // }
-        // System.out.println(dateBirthDay);
-        // checkEligible(dateBirthDay);
+        birthday = dateBirthDay.format(dateFormatOutput);
+        break;
+        } catch (Exception e) {
+        System.out.println("Invalid birth day! Please try again.");
+        }
+        }
+        System.out.println(dateBirthDay);
+        checkEligible(dateBirthDay);
 
         // test
-        LocalDate testDate = LocalDate.of((2564 - 543), 2, 1);
-        int lastDayMonth = testDate.lengthOfMonth();
-        // System.out.println("last day of month : " + lastDayMonth);
+        // LocalDate testDate = LocalDate.of((2564 - 543), 1, 1);
+        // int lastDayMonth = testDate.lengthOfMonth();
+        // // System.out.println("last day of month : " + lastDayMonth);
 
-        for (int m = 1; m <= 4; m++) {
-            testDate = LocalDate.of(2564, m, 1);
-            System.out.println();
-            System.out.println("╔═════════════════════════════════════════════╗");
-            System.out.println("║ Month : " + m );
-            System.out.println("╚═════════════════════════════════════════════╝");
+        // for (int m = 1; m <= 4; m++) {
+        //     testDate = LocalDate.of(2564, m, 1);
+        //     lastDayMonth = testDate.lengthOfMonth();
 
-            for (int d = 1; d <= lastDayMonth; d++) {
-                System.out.println("day : " + d);
-                testDate = LocalDate.of(2564, m, d);
-                checkEligible(testDate);
-            }
-        }
+        //     System.out.println();
+        //     System.out.println("╔═════════════════════════════════════════════╗");
+        //     System.out.println("║                  Month : " + m + "                  ║");
+        //     System.out.println("╚═════════════════════════════════════════════╝");
+
+        //     for (int d = 1; d <= lastDayMonth; d++) {
+        //         System.out.println("day : " + d);
+        //         testDate = LocalDate.of(2564, m, d);
+        //         checkEligible(testDate);
+        //     }
+        // }
     }
 }
