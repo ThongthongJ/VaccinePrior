@@ -45,22 +45,25 @@ public class VaccinePrior {
         // checkEligible(dateBirthDay);
 
         // test
-        System.out.println("Enter years for test");
+        System.out.println("Enter year for testing ( 'B.E.' only!)");
         int y = scan.nextInt();
+        System.out.println("Enter month testing");
+        int x = scan.nextInt();
         LocalDate testDate = null;
-        int years = y  - 543;
-
-        for (int m = 1; m <= 4; m++) {
+        int years = y;
+        System.out.println("Year Input (main) : " + years );
+        //  2544 ISSUES (M : 2) ***************************
+        for (int m = x; m <= x; m++) {
             testDate = LocalDate.of(years, m, 1);
             int lastDayMonth = testDate.lengthOfMonth();
             System.out.println();
             System.out.println("╔════════════════════════════════════╗");
-            System.out.println("║            Month : " + m + " " + lastDayMonth);
+            System.out.println("║       Month : " + m + " || Day : " + lastDayMonth);
             System.out.println("╚════════════════════════════════════╝");
 
             for (int d = 1; d <= lastDayMonth; d++) {
                 System.out.println("day : " + d);
-                testDate = LocalDate.of(2564, m, d);
+                testDate = LocalDate.of(y, m, d);
                 checkEligible(testDate);
             }
         }
@@ -70,6 +73,7 @@ public class VaccinePrior {
 
         DateTimeFormatter dateFormatOutput = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
 
+        // Don't Forget year - 543
         LocalDate dateBirthDay = LocalDate.of((date.getYear() - 543), date.getMonth(),
                 date.getDayOfMonth());
 
@@ -85,6 +89,7 @@ public class VaccinePrior {
 
         Year yearBirthDay = Year.from(dateBirthDay);
         int yearBirthDayValue = yearBirthDay.getValue();
+        System.out.println("Year in Function : " + yearBirthDayValue);
 
         int age = lastDayVaccine.getYear() - yearBirthDayValue;
 
@@ -112,7 +117,7 @@ public class VaccinePrior {
 
                 if (age == 65 && adultReadyGetV >= 12) {
                     eligibleFlag = true;
-                    firstDayVaccine = LocalDate.of(2021, monthBirthDayValue, dayBirthDay);
+                    firstDayVaccine = LocalDate.of(lastDayVaccine.getYear(), monthBirthDayValue, 9);
                 }
 
                 // Child 0 - 3 years old
@@ -137,7 +142,6 @@ public class VaccinePrior {
                         if (monthBirthDayValue == 12) {
                             int lastDayMonth = firstDayVaccine.lengthOfMonth();
                             eligibleFlag = true;
-                            System.out.println("111111");
                             firstDayVaccine = LocalDate.of(lastDayVaccine.getYear(), firstDayVaccine.getMonthValue(),
                                     lastDayMonth);
                         } else {
