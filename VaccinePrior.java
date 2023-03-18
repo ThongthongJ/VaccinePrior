@@ -1,4 +1,3 @@
-
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
@@ -41,13 +40,16 @@ public class VaccinePrior {
                 System.out.println("You've got to be kidding me! ");
                 return;
             }
-
+            // Age more than 65 years old
+            if (age > 65) {
+                eligibleFlag = true;
+            }
             // Adult 64 years old -> 65 years old
-            if (age <= 65) {
+            else {
 
-                int readyGet = lastDayVaccine.getMonthValue() + (12 - monthBirthDayValue);
+                int adultReady = lastDayVaccine.getMonthValue() + (12 - monthBirthDayValue);
 
-                if (readyGet >= 12 && age == 65) {
+                if (age == 65 && adultReady >= 12) {
                     eligibleFlag = true;
                     firstDayVaccine = LocalDate.of(2021, monthBirthDayValue, dayBirthDay);
                 }
@@ -69,12 +71,13 @@ public class VaccinePrior {
                         }
                     }
 
-                    // Baby born in December 2563
+                    // Baby 1 year born in December 2563 *********
                     else if (age == 1) {
                         if (monthBirthDayValue == 12) {
+                            int lastDay = firstDayVaccine.lengthOfMonth();
                             eligibleFlag = true;
-                            firstDayVaccine = LocalDate.of(lastDayVaccine.getYear(), firstDayVaccine.getMonthValue(),
-                                    dayBirthDay);
+                            firstDayVaccine = LocalDate.of(firstDayVaccine.getYear(), firstDayVaccine.getMonthValue(),
+                                    lastDay);
                         } else {
                             eligibleFlag = true;
                         }
@@ -101,14 +104,7 @@ public class VaccinePrior {
                             }
                         }
                     }
-                } else {
-                    eligibleFlag = false;
                 }
-            }
-
-            // Age more than 65 years old
-            else {
-                eligibleFlag = true;
             }
 
         } catch (Exception e) {
@@ -252,16 +248,18 @@ public class VaccinePrior {
 
         // Input Birth Day
         // while (true) {
-        // try {
-        // System.out.println("Please enter your birth day (dd-MM-yyyy)");
-        // dateBirthDay = LocalDate.parse(scan.next(), dateFormatInput);
+        //     try {
+        //         System.out.println("Please enter your birth day (dd-MM-yyyy)");
+        //         dateBirthDay = LocalDate.parse(scan.next(), dateFormatInput);
 
-        // birthday = dateBirthDay.format(dateFormatOutput);
-        // break;
-        // } catch (Exception e) {
-        // System.out.println("Invalid birth day! Please try again.");
+        //         birthday = dateBirthDay.format(dateFormatOutput);
+        //         break;
+        //     } catch (Exception e) {
+        //         System.out.println("Invalid birth day! Please try again.");
+        //     }
         // }
-        // }
+        // System.out.println(dateBirthDay);
+        // checkEligible(dateBirthDay);
 
         // test
         LocalDate testDate = LocalDate.of((2564 - 543), 2, 1);
@@ -272,7 +270,7 @@ public class VaccinePrior {
             testDate = LocalDate.of(2564, m, 1);
             System.out.println();
             System.out.println("╔═════════════════════════════════════════════╗");
-            System.out.println("║                  Month : " + m + "                  ║");
+            System.out.println("║ Month : " + m );
             System.out.println("╚═════════════════════════════════════════════╝");
 
             for (int d = 1; d <= lastDayMonth; d++) {
