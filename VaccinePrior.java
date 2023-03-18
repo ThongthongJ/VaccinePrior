@@ -28,7 +28,7 @@ public class VaccinePrior {
         int age = lastDayVaccine.getYear() - yearBirthDayValue;
 
         // <Display> : Information
-        System.out.println("Infomation");
+        // System.out.println("Infomation");
         // System.out.println("Gender : " + gender);
         // System.out.println("Birth day : " + birthday);
         System.out.println("Age : " + age);
@@ -115,7 +115,7 @@ public class VaccinePrior {
             // TODO: handle exception
         }
 
-        //Call function disPlay 
+        // Call function disPlay
         disPlay(dateBirthDay, firstDayVaccine, lastDayVaccine, eligibleFlag);
     }
 
@@ -169,7 +169,7 @@ public class VaccinePrior {
                     if (checkGetVaccine <= 12) {
                         dateBabySixMonth = LocalDate.of(yearBirthDayValue, checkGetVaccine, dayBirthDay);
                     }
-                    //Check  6 months old next year
+                    // Check 6 months old next year
                     else if (checkGetVaccine > 12) {
                         Month convertMonth = Month.of((checkGetVaccine % 12));
                         int nextYear = dateBabySixMonth.getYear() + 1;
@@ -251,19 +251,35 @@ public class VaccinePrior {
         // }
 
         // Input Birth Day
-        while (true) {
-            try {
-                System.out.println("Please enter your birth day (dd-MM-yyyy)");
-                dateBirthDay = LocalDate.parse(scan.next(), dateFormatInput);
+        // while (true) {
+        // try {
+        // System.out.println("Please enter your birth day (dd-MM-yyyy)");
+        // dateBirthDay = LocalDate.parse(scan.next(), dateFormatInput);
 
-                birthday = dateBirthDay.format(dateFormatOutput);
-                break;
-            } catch (Exception e) {
-                System.out.println("Invalid birth day! Please try again.");
+        // birthday = dateBirthDay.format(dateFormatOutput);
+        // break;
+        // } catch (Exception e) {
+        // System.out.println("Invalid birth day! Please try again.");
+        // }
+        // }
+
+        // test
+        LocalDate testDate = LocalDate.of((2564 - 543), 2, 1);
+        int lastDayMonth = testDate.lengthOfMonth();
+        // System.out.println("last day of month : " + lastDayMonth);
+
+        for (int m = 1; m <= 4; m++) {
+            testDate = LocalDate.of(2564, m, 1);
+            System.out.println();
+            System.out.println("╔═════════════════════════════════════════════╗");
+            System.out.println("║                  Month : " + m + "                  ║");
+            System.out.println("╚═════════════════════════════════════════════╝");
+
+            for (int d = 1; d <= lastDayMonth; d++) {
+                System.out.println("day : " + d);
+                testDate = LocalDate.of(2564, m, d);
+                checkEligible(testDate);
             }
         }
-
-        checkEligible(dateBirthDay);
-
     }
 }
