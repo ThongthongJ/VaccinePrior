@@ -31,37 +31,39 @@ public class VaccinePrior {
         // }
 
         // Input Birth Day
-        while (true) {
-            try {
-                System.out.println("Please enter your birth day (dd-MM-yyyy)");
-                dateBirthDay = LocalDate.parse(scan.next(), dateFormatInput);
+        // while (true) {
+        // try {
+        // System.out.println("Please enter your birth day (dd-MM-yyyy)");
+        // dateBirthDay = LocalDate.parse(scan.next(), dateFormatInput);
 
-                birthday = dateBirthDay.format(dateFormatOutput);
-                break;
-            } catch (Exception e) {
-                System.out.println("Invalid birth day! Please try again.");
-            }
-        }
-        checkEligible(dateBirthDay);
+        // birthday = dateBirthDay.format(dateFormatOutput);
+        // break;
+        // } catch (Exception e) {
+        // System.out.println("Invalid birth day! Please try again.");
+        // }
+        // }
+        // checkEligible(dateBirthDay);
 
         // test
-        // LocalDate testDate = LocalDate.of((2564 - 543), 2, 1);
-        // int lastDayMonth = testDate.lengthOfMonth();
-        // // System.out.println("last day of month : " + lastDayMonth);
+        System.out.println("Enter years for test");
+        int y = scan.nextInt();
+        LocalDate testDate = null;
+        int years = y  - 543;
 
-        // for (int m = 1; m <= 4; m++) {
-        // testDate = LocalDate.of(2564, m, 1);
-        // System.out.println();
-        // System.out.println("╔═════════════════════════════════════════════╗");
-        // System.out.println("║ Month : " + m + " ║");
-        // System.out.println("╚═════════════════════════════════════════════╝");
+        for (int m = 1; m <= 4; m++) {
+            testDate = LocalDate.of(years, m, 1);
+            int lastDayMonth = testDate.lengthOfMonth();
+            System.out.println();
+            System.out.println("╔════════════════════════════════════╗");
+            System.out.println("║            Month : " + m + " " + lastDayMonth);
+            System.out.println("╚════════════════════════════════════╝");
 
-        // for (int d = 1; d <= lastDayMonth; d++) {
-        // System.out.println("day : " + d);
-        // testDate = LocalDate.of(2564, m, d);
-        // checkEligible(testDate);
-        // }
-        // }
+            for (int d = 1; d <= lastDayMonth; d++) {
+                System.out.println("day : " + d);
+                testDate = LocalDate.of(2564, m, d);
+                checkEligible(testDate);
+            }
+        }
     }
 
     static public void checkEligible(LocalDate date) {
