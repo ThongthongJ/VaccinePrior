@@ -9,7 +9,7 @@ public class VaccinePrior {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
 
-        DateTimeFormatter dateFormatInput = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter dateFormatInput = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter dateFormatOutput = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
 
         String gender = "";
@@ -47,14 +47,15 @@ public class VaccinePrior {
         // test
         System.out.println("Enter year for testing ( 'B.E.' only!)");
         int y = scan.nextInt();
-        System.out.println("Enter month testing");
+        System.out.println("Enter month testing (quarterly : 1, 4, 7, 10)");
         int x = scan.nextInt();
         LocalDate testDate = null;
         int years = y - 543;
-        System.out.println("Year send paremeter (main) : " + years + " Input : " + y);
-        // 2544 ISSUES (M : 2) ***************************
-        for (int m = x; m <= x; m++) {
+        System.out.println("Year (main) : " + years + " Input : " + y);
+        // ISSUES (M : 2) ***************************
+        for (int m = x; m <= x + 2; m++) {
             testDate = LocalDate.of(years, m, 1);
+            System.out.println("Before send (main) : " + testDate);
             int lastDayMonth = testDate.lengthOfMonth();
             System.out.println();
             System.out.println("╔════════════════════════════════════╗");
@@ -63,7 +64,8 @@ public class VaccinePrior {
 
             for (int d = 1; d <= lastDayMonth; d++) {
                 System.out.println("day : " + d);
-                testDate = LocalDate.of(years + 543, m, d);
+                testDate = LocalDate.of(years, m, d);
+                System.out.println("send paremeter (main) : " + testDate);
                 checkEligible(testDate);
             }
         }
@@ -73,9 +75,13 @@ public class VaccinePrior {
 
         DateTimeFormatter dateFormatOutput = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
 
-        // Don't Forget year - 543
-        LocalDate dateBirthDay = LocalDate.of((date.getYear() - 543), date.getMonth(),
+        // Don't Forget year - 543 *************************************************
+        int conVertYear = date.getYear(); // Don't have -543 for testing only
+        LocalDate dateBirthDay = LocalDate.of(conVertYear, date.getMonth(),
                 date.getDayOfMonth());
+
+        System.out.println("Last day in function : " + dateBirthDay.lengthOfMonth());
+        System.out.println("Year in Function : " + dateBirthDay.getYear());
 
         LocalDate firstDayVaccine = LocalDate.of(2021, 6, 1);
         LocalDate lastDayVaccine = LocalDate.of(2021, 8, 31);
@@ -89,7 +95,6 @@ public class VaccinePrior {
 
         Year yearBirthDay = Year.from(dateBirthDay);
         int yearBirthDayValue = yearBirthDay.getValue();
-        System.out.println("Year in Function : " + yearBirthDayValue);
 
         int age = lastDayVaccine.getYear() - yearBirthDayValue;
 
@@ -104,7 +109,7 @@ public class VaccinePrior {
 
             // Never born
             if (age < 0) {
-                System.out.println("You've got to be kidding me! ");
+                System.out.println("**** You've got to be kidding me! You never born **** ");
                 return;
             }
             // Age more than 65 years old
@@ -117,7 +122,9 @@ public class VaccinePrior {
 
                 if (age == 65 && adultReadyGetV >= 12) {
                     eligibleFlag = true;
-                    firstDayVaccine = LocalDate.of(lastDayVaccine.getYear(), monthBirthDayValue, dayBirthDay);
+                    if (6 <= monthBirthDayValue && monthBirthDayValue <= 8) {
+                        firstDayVaccine = LocalDate.of(lastDayVaccine.getYear(), monthBirthDayValue, dayBirthDay);
+                    }
                 }
 
                 // Child 0 - 3 years old
@@ -139,13 +146,16 @@ public class VaccinePrior {
 
                     // Baby 1 years old born in December 2563
                     else if (age == 1) {
-                        if (monthBirthDayValue == 12) {
-                            int lastDayMonth = firstDayVaccine.lengthOfMonth();
+                        int lastDayMonth = firstDayVaccine.lengthOfMonth();
+                        // check last day?
+                        if (monthBirthDayValue == 12 && dayBirthDay > lastDayMonth) {
                             eligibleFlag = true;
-                            firstDayVaccine = LocalDate.of(lastDayVaccine.getYear(), firstDayVaccine.getMonthValue(),
-                                    lastDayMonth);
-                        } else {
+                            firstDayVaccine = LocalDate.of(lastDayVaccine.getYear(),
+                                    firstDayVaccine.getMonthValue(), lastDayMonth);
+                        } else if (monthBirthDayValue == 12) {
                             eligibleFlag = true;
+                            firstDayVaccine = LocalDate.of(lastDayVaccine.getYear(),
+                                    firstDayVaccine.getMonthValue(), dayBirthDay);
                         }
                     }
 
@@ -160,13 +170,9 @@ public class VaccinePrior {
                         int stop = lastDayVaccine.getMonthValue();
 
                         if (monthBirthDayValue >= start) {
-                            for (int indexMonth = start; indexMonth <= stop; indexMonth++) {
-                                if (indexMonth == monthBirthDayValue) {
-                                    eligibleFlag = true;
-                                    lastDayVaccine = LocalDate.of(lastDayVaccine.getYear(), indexMonth, dayBirthDay);
-                                } else {
-                                    eligibleFlag = true;
-                                }
+                            eligibleFlag = true;
+                            if (monthBirthDayValue <= stop) {
+                                lastDayVaccine = LocalDate.of(lastDayVaccine.getYear(), monthBirthDay, dayBirthDay);
                             }
                         }
                     }
