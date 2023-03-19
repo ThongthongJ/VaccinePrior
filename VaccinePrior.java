@@ -50,9 +50,9 @@ public class VaccinePrior {
         System.out.println("Enter month testing");
         int x = scan.nextInt();
         LocalDate testDate = null;
-        int years = y;
-        System.out.println("Year Input (main) : " + years );
-        //  2544 ISSUES (M : 2) ***************************
+        int years = y - 543;
+        System.out.println("Year send paremeter (main) : " + years + " Input : " + y);
+        // 2544 ISSUES (M : 2) ***************************
         for (int m = x; m <= x; m++) {
             testDate = LocalDate.of(years, m, 1);
             int lastDayMonth = testDate.lengthOfMonth();
@@ -63,7 +63,7 @@ public class VaccinePrior {
 
             for (int d = 1; d <= lastDayMonth; d++) {
                 System.out.println("day : " + d);
-                testDate = LocalDate.of(y, m, d);
+                testDate = LocalDate.of(years + 543, m, d);
                 checkEligible(testDate);
             }
         }
@@ -117,7 +117,7 @@ public class VaccinePrior {
 
                 if (age == 65 && adultReadyGetV >= 12) {
                     eligibleFlag = true;
-                    firstDayVaccine = LocalDate.of(lastDayVaccine.getYear(), monthBirthDayValue, 9);
+                    firstDayVaccine = LocalDate.of(lastDayVaccine.getYear(), monthBirthDayValue, dayBirthDay);
                 }
 
                 // Child 0 - 3 years old
@@ -188,7 +188,7 @@ public class VaccinePrior {
             System.out.println("║ Start Date : " + fdv + "   ║");
             System.out.println("║ End date : " + ldv + "     ║");
             System.out.println("╚════════════════════════════╝");
-        } else if (eligibleFlag == false) {
+        } else {
             status = "N";
             System.out.println("╔════════════════════════════╗");
             System.out.println("║ Eligible Flag : " + status + "          ║");
