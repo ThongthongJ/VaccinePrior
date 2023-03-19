@@ -1,7 +1,6 @@
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
@@ -10,13 +9,9 @@ public class VaccinePrior {
         Scanner scan = new Scanner(System.in);
 
         DateTimeFormatter dateFormatInput = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        // DateTimeFormatter dateFormatOutput =
-        // DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+        LocalDate dateBirthDay = null;
 
         String gender = "";
-        // String birthday = "";
-
-        LocalDate dateBirthDay = null;
 
         // Input gender
         while (true) {
@@ -32,61 +27,25 @@ public class VaccinePrior {
         }
 
         // Input Birth Day
-        // while (true) {
-        // try {
-        // System.out.println("Please enter your birth day (B.E. only!) ->
-        // (yyyy-MM-dd)");
-        // System.out.print("--> : ");
-        // dateBirthDay = LocalDate.parse(scan.next(), dateFormatInput);
-
-        // // birthday = dateBirthDay.format(dateFormatOutput);
-        // break;
-        // } catch (Exception e) {
-        // System.out.println("Invalid birth day! Please try again.");
-        // }
-        // }
-        // checkEligible(dateBirthDay, gender);
-
-         // test
-         System.out.println("Enter year for testing ( 'B.E.' only!)");
-         int y = scan.nextInt();
-         System.out.println("Enter month testing (quarterly : 1, 4, 7, 10)");
-         int x = scan.nextInt();
-         LocalDate testDate = null;
-         int years = y - 543;
-         System.out.println("Year (main) : " + years + " Input : " + y);
- 
-         for (int m = x; m <= x + 2; m++) {
-             testDate = LocalDate.of(years, m, 1);
-             System.out.println("Before send (main) : " + testDate);
-             int lastDayMonth = testDate.lengthOfMonth();
-             System.out.println();
-             System.out.println("╔════════════════════════════════════╗");
-             System.out.println("║ Month : " + m + " || Day : " + lastDayMonth);
-             System.out.println("╚════════════════════════════════════╝");
- 
-             for (int d = 1; d <= lastDayMonth; d++) {
-                 System.out.println("day : " + d);
-                 testDate = LocalDate.of(years, m, d);
-                 System.out.println("send paremeter (main) : " + testDate);
-                 checkEligible(testDate, gender);
-             }
-         }
-
+        while (true) {
+            try {
+                System.out.println("Please enter your birth day (B.E. only!) ->(yyyy-MM-dd)");
+                System.out.print("--> : ");
+                dateBirthDay = LocalDate.parse(scan.next(), dateFormatInput);
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid birth day! Please try again.");
+            }
+        }
+        checkEligible(dateBirthDay, gender);
     }
 
     static public void checkEligible(LocalDate date, String gender) {
 
-        // DateTimeFormatter dateFormatOutput =
-        // DateTimeFormatter.ofPattern("dd-MMM-yyyy");
-
-        // Don't Forget year - 543 *************************************************
-        int conVertYear = date.getYear(); // Don't have -543 for testing version only
+        // Converting B.E -> A.D.
+        int conVertYear = date.getYear() - 543;
         LocalDate dateBirthDay = LocalDate.of(conVertYear, date.getMonth(),
                 date.getDayOfMonth());
-
-        // System.out.println("Last day in function : " + dateBirthDay.lengthOfMonth());
-        // System.out.println("Year in Function : " + dateBirthDay.getYear());
 
         LocalDate firstDayVaccine = LocalDate.of(2021, 6, 1);
         LocalDate lastDayVaccine = LocalDate.of(2021, 8, 31);
@@ -94,16 +53,10 @@ public class VaccinePrior {
         boolean eligibleFlag = false;
 
         int dayBirthDay = dateBirthDay.getDayOfMonth();
-
-        Month monthBirthDay = dateBirthDay.getMonth();
-        int monthBirthDayValue = monthBirthDay.getValue();
-
-        Year yearBirthDay = Year.from(dateBirthDay);
-        int yearBirthDayValue = yearBirthDay.getValue();
+        int monthBirthDayValue = dateBirthDay.getMonthValue();
+        int yearBirthDayValue = dateBirthDay.getYear();
 
         int age = lastDayVaccine.getYear() - yearBirthDayValue;
-
-        // System.out.println("Age : " + age);
 
         // Check Eligible
         try {
@@ -113,24 +66,29 @@ public class VaccinePrior {
                 System.out.println("**** You've got to be kidding me! You never born **** ");
                 return;
             }
-            // Age more than 65 years old
-            else if (age > 65) {
-                eligibleFlag = true;
-            }
-            // Age less than 65 years old
-            else {
-                // Adult 64 years old -> 65 years old
+
+            // Adult
+            else if (age >= 65) {
                 int adultReadyGetV = lastDayVaccine.getMonthValue() + (12 - monthBirthDayValue);
 
-                if (age == 65 && adultReadyGetV >= 12) {
+                // Age more than 65 years old
+                if (age > 65) {
+                    eligibleFlag = true;
+                }
+
+                // Adult 64 years old -> 65 years old.
+                else if (age == 65 && adultReadyGetV >= 12) {
                     eligibleFlag = true;
                     if (6 <= monthBirthDayValue && monthBirthDayValue <= 8) {
                         firstDayVaccine = LocalDate.of(lastDayVaccine.getYear(), monthBirthDayValue, dayBirthDay);
                     }
                 }
+            }
 
-                // Child 0 - 3 years old
-                else if (age >= 0 && age <= 3) {
+            // Child 0 - 3 years old
+            else {
+
+                if (age >= 0 && age <= 3) {
 
                     // Baby born in 2564
                     if (age == 0) {
@@ -170,7 +128,7 @@ public class VaccinePrior {
                         if (monthBirthDayValue >= start) {
                             eligibleFlag = true;
                             if (monthBirthDayValue <= stop) {
-                                lastDayVaccine = LocalDate.of(lastDayVaccine.getYear(), monthBirthDay, dayBirthDay);
+                                lastDayVaccine = LocalDate.of(lastDayVaccine.getYear(), monthBirthDayValue, dayBirthDay);
                             }
                         }
                     }
@@ -194,20 +152,20 @@ public class VaccinePrior {
         String status = "";
         if (eligibleFlag == true) {
             status = "Y";
-            System.out.println("╔═══════════════════════════════╗");
-            System.out.println("║ Gender : " + gender + "            ");
-            System.out.println("║ Eligible Flag : " + status + "             ║");
-            System.out.println("║ Start Date :   " + dayF + "-" + monthFStr + "-" + yearF + "    ║");
-            System.out.println("║ End date :     " + dayL + "-" + monthLStr + "-" + yearL + "    ║");
-            System.out.println("╚═══════════════════════════════╝");
+            System.out.printf("%-30s\n", "╔═════════════════════════════╗");
+            System.out.printf("%-30s║\n", "║ Gender : " + gender);
+            System.out.printf("%-30s║\n", "║ Eligible Flag : " + status);
+            System.out.printf("%-30s║\n", "║ Start Date : " + dayF + "-" + monthFStr + "-" + yearF);
+            System.out.printf("%-30s║\n", "║ End date : " + dayL + "-" + monthLStr + "-" + yearL);
+            System.out.printf("%-30s\n", "╚═════════════════════════════╝");
         } else {
             status = "N";
-            System.out.println("╔════════════════════════════╗");
-            System.out.println("║ Gender : " + gender + "             ");
-            System.out.println("║ Eligible Flag : " + status + "          ║");
-            System.out.println("║ Start Date :  -            ║");
-            System.out.println("║ End date :  -              ║");
-            System.out.println("╚════════════════════════════╝");
+            System.out.printf("%-30s\n", "╔═════════════════════════════╗");
+            System.out.printf("%-30s║\n", "║ Gender : " + gender);
+            System.out.printf("%-30s║\n", "║ Eligible Flag : " + status);
+            System.out.printf("%-30s║\n", "║ Start Date :    -");
+            System.out.printf("%-30s║\n", "║ End date :      -");
+            System.out.printf("%-30s\n", "╚═════════════════════════════╝");
         }
     }
 }
