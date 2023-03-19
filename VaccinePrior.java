@@ -61,14 +61,8 @@ public class VaccinePrior {
         // Check Eligible
         try {
 
-            // Never born
-            if (age < 0) {
-                System.out.println("**** You've got to be kidding me! You never born **** ");
-                return;
-            }
-
             // Adult
-            else if (age >= 65) {
+            if (age >= 65) {
                 int adultReadyGetV = lastDayVaccine.getMonthValue() + (12 - monthBirthDayValue);
 
                 // Age more than 65 years old
@@ -128,7 +122,8 @@ public class VaccinePrior {
                         if (monthBirthDayValue >= start) {
                             eligibleFlag = true;
                             if (monthBirthDayValue <= stop) {
-                                lastDayVaccine = LocalDate.of(lastDayVaccine.getYear(), monthBirthDayValue, dayBirthDay);
+                                lastDayVaccine = LocalDate.of(lastDayVaccine.getYear(), monthBirthDayValue,
+                                        dayBirthDay);
                             }
                         }
                     }
