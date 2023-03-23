@@ -82,11 +82,11 @@ public class VaccinePrior {
                         firstDayVaccine = LocalDate.of(2021, babySixMonth, dayBirthDay);
                     }
                 }
-                // 1 years old and baby
+                // 1 years old
                 else if (age == 1) {
                     eligibleFlag = true;
 
-                    // Baby born in December 2563
+                    // Born in December 2563
                     int lastDayMonth = firstDayVaccine.lengthOfMonth();
                     if (monthBirthDayValue == 12 && dayBirthDay > lastDayMonth) {
                         firstDayVaccine = LocalDate.of(lastDayVaccine.getYear(), firstDayVaccine.getMonthValue(), lastDayMonth);
@@ -114,7 +114,7 @@ public class VaccinePrior {
             System.exit(1);
         }
 
-        // Display status
+        // Set display status
         int dayF = firstDayVaccine.getDayOfMonth();
         Month monthF = firstDayVaccine.getMonth();
         String monthFStr = monthF.toString().substring(0, 3);
