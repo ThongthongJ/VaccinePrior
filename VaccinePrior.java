@@ -11,7 +11,6 @@ public class VaccinePrior {
         LocalDate dateBirthDay = null;
         String gender = "";
 
-        while (true) {
             // Input gender
             while (true) {
                 System.out.println("What is your gender (male/female)?");
@@ -39,7 +38,6 @@ public class VaccinePrior {
                 }
             }
             checkEligible(dateBirthDay, gender);
-        }
     }
 
     static public void checkEligible(LocalDate date, String gender) {
@@ -74,7 +72,7 @@ public class VaccinePrior {
                 }
             }
             // Child 0 - 2 years old
-            else if (age >= 0 && age <= 3) {
+            else if (age >= 0 && age <= 2) {
 
                 // Baby born in 2564
                 if (age == 0) {
@@ -116,7 +114,7 @@ public class VaccinePrior {
             System.exit(1);
         }
 
-        // Display result
+        // Display status
         int dayF = firstDayVaccine.getDayOfMonth();
         Month monthF = firstDayVaccine.getMonth();
         String monthFStr = monthF.toString().substring(0, 3);
@@ -126,7 +124,7 @@ public class VaccinePrior {
         Month monthL = lastDayVaccine.getMonth();
         String monthLStr = monthL.toString().substring(0, 3);
         int yearL = lastDayVaccine.getYear() + 543;
-
+        //Display result
         String status = "";
         if (eligibleFlag == true) {
             status = "Y";
